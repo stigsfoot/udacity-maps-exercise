@@ -102,6 +102,12 @@
           ]
       });
 
+      // This autocomplete is for use in the geocoder entry box.
+      var zoomAutocomplete = new google.maps.places.Autocomplete(
+          document.getElementById('zoom-to-area-text'));
+      // Bias the boundaries within the map for the zoom to area text.
+      zoomAutocomplete.bindTo('bounds', map);
+
       var locations = [
           {title: 'Dulles Airport', location: {lat: 38.953116, lng: -77.456539}},
           {title: 'Reagan Airport', location: {lat: 38.851242, lng: -77.040231}},
@@ -212,7 +218,8 @@
   </script>
 
   <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgHfnKc43uuwUDNNyc287JFAtdiAQwU2I&v=3&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgHfnKc43uuwUDNNyc287JFAtdiAQwU2I&amp;v=3&amp;callback=initMap&amp;libraries=places">
   </script>
+
  </body>
 </html>
