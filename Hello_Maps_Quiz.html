@@ -9,10 +9,10 @@
  <body>
   <div class="container">
     <div class="options-box">
-      <h1>Washinton Area Airport Facts</h1>
+      <h1>Airport Pokestops</h1>
       <div>
-        <input id="show-listings" type="button" value="Show Listings">
-        <input id="hide-listings" type="button" value="Hide Listings">
+        <input id="show-pokestops" type="button" value="Show Pokestops">
+        <input id="hide-pokestops" type="button" value="Hide Pokestops">
       </div>
     </div>
     <div id="map"></div>
@@ -20,14 +20,11 @@
 
   <script>
     var map;
-
     var markers = [];
 
     function initMap() {
 
-      var DCA = {lat: 38.851242, lng: -77.040231};
-      var Dulles =  {lat: 38.953116, lng: -77.456539};
-      var BWI = {lat: 39.177404, lng: -76.668392};
+
 
       map = new google.maps.Map(document.getElementById('map'), {
         zoom: 11,
@@ -43,9 +40,22 @@
 
       var largeInfowindow = new google.maps.InfoWindow();
 
+      // Origins, anchor positions and coordinates of the marker increase in the X
+      // direction to the right and in the Y direction down.
+      var image = {
+        url: 'http://i1.wp.com/nintendo-papercraft.com/wp-content/uploads/2014/04/pokeball.png?resize=50%2C50',
+        // This marker is 20 pixels wide by 32 pixels high.
+        size: new google.maps.Size(50, 50),
+        // The origin for this image is (0, 0).
+        origin: new google.maps.Point(0, 0),
+        // The anchor for this image is the base of the flagpole at (0, 32).
+        anchor: new google.maps.Point(0, 32)
+      };
+
 
       for (var i = 0; i < locations.length; i++) {
           // Get the position from the location array.
+
           var position = locations[i].location;
           var title = locations[i].title;
           // Create a marker per location, and put into markers array.
@@ -53,7 +63,8 @@
             position: position,
             title: title,
             animation: google.maps.Animation.DROP,
-            id: i
+            id: i,
+            icon: image
           });
           // Push the marker to our array of markers.
           markers.push(marker);
@@ -62,8 +73,8 @@
             populateInfoWindow(this, largeInfowindow);
           });
         }
-        document.getElementById('show-listings').addEventListener('click', showListings);
-        document.getElementById('hide-listings').addEventListener('click', hideListings);
+        document.getElementById('show-pokestops').addEventListener('click', showListings);
+        document.getElementById('hide-pokestops').addEventListener('click', hideListings);
       }
 
       function populateInfoWindow(marker, infowindow) {
