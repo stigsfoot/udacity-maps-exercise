@@ -13,10 +13,45 @@
 
      function initMap() {
 
-       var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 11,
-          center: {lat: 38.907192, lng: -77.036871}
-        });
+      var DCA = {lat: 38.851242, lng: -77.040231};
+
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 11,
+        center: {lat: 38.907192, lng: -77.036871}
+      });
+
+      var contentString = '<div id="content">'+
+
+        '<h1>DCA Airport</h1>'+
+        '<div id="bodyContent">'+
+          '<p><b>Address:</b> Arlington, VA 22202</p>'+
+          '<p><b>Code:</b> DCA</p>'+
+          '<p><b>Area:</b> 18 acres</p>'+
+          '<p><b>Elevation:</b> 15.09`</p>'+
+          '<p><b>Hub for:</b> American Airlines</p>'+
+          '<p><b>Phone:</b> (703) 417-8000</p>'+
+          '<p><b>Opened:</b> June 16, 1941</p>'+
+        '</div>'+
+
+      '</div>';
+
+      var marker = new google.maps.Marker({
+        position: DCA,
+        map: map,
+        title: 'DCA Airport'
+       });
+
+      marker.addListener('click', function() {
+        infowindow.open(map, marker);
+      });
+
+      var infowindow = new google.maps.InfoWindow({
+        content: contentString
+      });
+
+
+
+
      }
   </script>
 
