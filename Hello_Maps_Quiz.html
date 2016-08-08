@@ -7,52 +7,94 @@
    </style>
  </head>
  <body>
-  <div id="map"></div>
-  <script>
-     var map;
+  <div class="container">
+    <div class="options-box">
+      <h1>Washinton Area Airport Facts</h1>
+      <div>
+        <input id="show-listings" type="button" value="Show Listings">
+        <input id="hide-listings" type="button" value="Hide Listings">
+      </div>
+    </div>
+    <div id="map"></div>
+  </div>
 
-     function initMap() {
+  <script>
+    var map;
+
+    var markers = [];
+
+    function initMap() {
 
       var DCA = {lat: 38.851242, lng: -77.040231};
+      var Dulles =  {lat: 38.953116, lng: -77.456539};
+      var BWI = {lat: 39.177404, lng: -76.668392};
 
-      var map = new google.maps.Map(document.getElementById('map'), {
+      map = new google.maps.Map(document.getElementById('map'), {
         zoom: 11,
+        mapTypeControl: false,
         center: {lat: 38.907192, lng: -77.036871}
       });
 
-      var contentString = '<div id="content">'+
+      var locations = [
+          {title: 'Dulles Airport', location: {lat: 38.953116, lng: -77.456539}},
+          {title: 'Reagan Airport', location: {lat: 38.851242, lng: -77.040231}},
+          {title: 'Baltimore Washinton Airport', location: {lat: 39.177404, lng: -76.668392}}
+      ];
 
-        '<h1>DCA Airport</h1>'+
-        '<div id="bodyContent">'+
-          '<p><b>Address:</b> Arlington, VA 22202</p>'+
-          '<p><b>Code:</b> DCA</p>'+
-          '<p><b>Area:</b> 18 acres</p>'+
-          '<p><b>Elevation:</b> 15.09`</p>'+
-          '<p><b>Hub for:</b> American Airlines</p>'+
-          '<p><b>Phone:</b> (703) 417-8000</p>'+
-          '<p><b>Opened:</b> June 16, 1941</p>'+
-        '</div>'+
-
-      '</div>';
-
-      var marker = new google.maps.Marker({
-        position: DCA,
-        map: map,
-        title: 'DCA Airport'
-       });
-
-      marker.addListener('click', function() {
-        infowindow.open(map, marker);
-      });
-
-      var infowindow = new google.maps.InfoWindow({
-        content: contentString
-      });
+      var largeInfowindow = new google.maps.InfoWindow();
 
 
+      for (var i = 0; i < locations.length; i++) {
+          // Get the position from the location array.
+          var position = locations[i].location;
+          var title = locations[i].title;
+          // Create a marker per location, and put into markers array.
+           var marker = new google.maps.Marker({
+            position: position,
+            title: title,
+            animation: google.maps.Animation.DROP,
+            id: i
+          });
+          // Push the marker to our array of markers.
+          markers.push(marker);
+          // Create an onclick event to open an infowindow at each marker.
+          marker.addListener('click', function() {
+            populateInfoWindow(this, largeInfowindow);
+          });
+        }
+        document.getElementById('show-listings').addEventListener('click', showListings);
+        document.getElementById('hide-listings').addEventListener('click', hideListings);
+      }
 
+      function populateInfoWindow(marker, infowindow) {
+        // Check to make sure the infowindow is not already opened on this marker.
+        if (infowindow.marker != marker) {
+          infowindow.marker = marker;
+          infowindow.setContent('<div>' + marker.title + '</div>');
+          infowindow.open(map, marker);
+          // Make sure the marker property is cleared if the infowindow is closed.
+          infowindow.addListener('closeclick', function() {
+            infowindow.marker = null;
+          });
+        }
+      }
 
-     }
+      function showListings() {
+        var bounds = new google.maps.LatLngBounds();
+        // Extend the boundaries of the map for each marker and display the marker
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(map);
+          bounds.extend(markers[i].position);
+        }
+        map.fitBounds(bounds);
+      }
+
+      function hideListings() {
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+        }
+      }
+
   </script>
 
   <script async defer
